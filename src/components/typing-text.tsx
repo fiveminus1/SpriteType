@@ -1,4 +1,5 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
 
 type TypingTextProps = {
   words: { word: string }[];  // Array of words
@@ -28,8 +29,25 @@ const TypingText: React.FC<TypingTextProps> = ({ words, typedText, cursorPositio
     return '';
   };
 
+  const handleImageMovement = () => {
+    setImagePosition({ top: 0, left: cursorPosition * 14 });
+  };
+
+  const [imagePosition, setImagePosition] = useState({ top: 0, left: 0 });
+
+  useEffect(() => {
+    handleImageMovement();
+  }, [cursorPosition]);
+
   return (
     <div className="relative w-full max-w-[90vw] bg-[#ffd4e5] bg-opacity-50 p-8 rounded-lg shadow-lg">
+      <Image
+        src="/characters/totoro.png"
+        alt="Totoro sprite"
+        width={40}
+        height={40}
+        style={{ position: 'absolute', top: imagePosition.top, left: imagePosition.left }}
+      />
       <p className="text-2xl leading-loose tracking-wide break-words">
         {words.map((word, wordIndex) => (
           <span key={wordIndex} className="inline-block mr-2">
@@ -38,6 +56,8 @@ const TypingText: React.FC<TypingTextProps> = ({ words, typedText, cursorPositio
               <span
                 key={letterIndex}
                 className={getLetterClass(wordIndex, letterIndex)} // Assign color/underline based on correctness
+                data-word-index={wordIndex}
+                data-letter-index={letterIndex}
               >
                 {letter}
               </span>
