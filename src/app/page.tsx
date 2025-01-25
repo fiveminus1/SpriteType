@@ -4,6 +4,8 @@ import useRandomWords from '../hooks/useRandomWords';
 import Timer, { TimerHandle } from '@/components/timer';
 import TypingText from '../components/typing-text';
 import { FormEvent, useState, useRef } from 'react';
+import { LiaRedoAltSolid } from "react-icons/lia";
+
 
 export default function Home() {
   //Puts random words in an array "words." Set parameter for # of random words
@@ -58,11 +60,12 @@ export default function Home() {
   return (
     <div className="grid min-h-screen p-6 sm:p-8 font-[Roboto Mono] bg-[var(--background)]">
       <main className="flex flex-col items-center justify-start flex-grow mt-20">
-        <div className="flex flex-row items-center space-x-6 mb-10 w-full max-w-[90vw] relative">
+        <div className="flex flex-row items-center justify-between mb-10 w-full max-w-[90vw]">
           <div className="p-4 bg-gray-300 text-black rounded-full w-16 h-16 flex items-center justify-center">
             <Timer ref={timerRef} />
           </div>
-          <div className="flex flex-col items-center absolute left-1/2 transform -translate-x-1/2 p-4 pl-6 pr-6 bg-gray-300 text-black rounded-lg w-60">
+
+          <div className="flex flex-col items-center p-4 pl-6 pr-6 bg-gray-300 text-black rounded-lg w-60 mx-auto">
             <p className="mb-2 text-med">Target WPM</p>
             <input
               type="number"
@@ -77,9 +80,9 @@ export default function Home() {
 
           <button
             onClick={handleReplay}
-            className="p-4 bg-gray-300 text-black rounded-full absolute right-0"
+            className="p-4 bg-gray-300 text-black rounded-full w-16 h-16 flex items-center justify-center"
           >
-            Replay?
+            <LiaRedoAltSolid />
           </button>
         </div>
 
