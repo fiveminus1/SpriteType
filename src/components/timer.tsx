@@ -1,12 +1,28 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, forwardRef, useImperativeHandle } from "react";
 
-const Timer = () => {
+export type TimerHandle = {
+    reset: () => void;
+}
+
+type TimerProps = {};
+
+const Timer = forwardRef<TimerHandle, TimerProps>((props, ref) => {
     const [timeLeft, setTimeLeft] = useState(15);
+    const [isRunning, setIsRunning] = useState(true);
+
+    const reset = () => {
+        setTimeLeft(15);
+        setIsRunning(true);
+    }
+
+    useImperativeHandle(ref, () => ({
+        reset,
+    }));
 
     useEffect(() => {
-        if(timeLeft === 0) 
+        if(!isRunning || timeLeft === 0) 
             return;
 
         const intervalId = setInterval(() => {
@@ -14,13 +30,13 @@ const Timer = () => {
         }, 1000);
 
         return () => clearInterval(intervalId);
-    }, [timeLeft]);
+    }, [timeLeft, isRunning]);
 
     return (
         <div>
             <h2>Time Left: {timeLeft}s</h2>
         </div>
     );
-};
+});
 
 export default Timer;
