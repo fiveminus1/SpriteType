@@ -15,6 +15,7 @@ export default function Home() {
   const [errorMessage, setErrorMessage] = useState('');
   const [cursorPosition, setCursorPosition] = useState(0);
   const [startedTyping, setStartedTyping] = useState(false);
+  const [timerEnded, setTimerEnded] = useState(false);
   const timerRef = useRef<TimerHandle>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -69,6 +70,12 @@ export default function Home() {
     }
   };
 
+  const handleTimerEnd = () => {
+    setTimeout(() => {
+      setTimerEnded(true);
+    }, 0);
+  };
+
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus();
@@ -94,7 +101,7 @@ export default function Home() {
       <main className="flex flex-col items-center justify-start flex-grow mt-20">
         <div className="flex flex-row items-center justify-between mb-10 w-full max-w-[90vw]">
           <div className="p-4 bg-gray-300 text-black rounded-full w-16 h-16 flex items-center justify-center">
-            <Timer ref={timerRef} />
+            <Timer ref={timerRef} onEnd={handleTimerEnd}/>
           </div>
 
           <div className="flex flex-col items-center p-4 pl-6 pr-6 bg-gray-300 text-black rounded-lg w-60 mx-auto">
@@ -125,26 +132,28 @@ export default function Home() {
           cursorPosition={cursorPosition}
         />
 
-        <input
-          ref={inputRef}
-          type="text"
-          value={typedText}
-          onChange={handleChange}
-          onFocus={moveCursorToEnd}
-          onBlur={()=> {
-            setTimeout(() => { 
-              if(inputRef.current){
-                inputRef.current.focus()
-                moveCursorToEnd();
-              }
-            }, 0);
-          }}
-          placeholder="Start typing..."
-          className="mt-6 p-4 bg-white text-black rounded-lg w-80 text-center"
-          autoCorrect='off'
-          autoComplete='off'
-          spellCheck='false'
-        />
+        {!timerEnded && (
+          <input
+            ref={inputRef}
+            type="text"
+            value={typedText}
+            onChange={handleChange}
+            onFocus={moveCursorToEnd}
+            onBlur={()=> {
+              setTimeout(() => { 
+                if(inputRef.current){
+                  inputRef.current.focus()
+                  moveCursorToEnd();
+                }
+              }, 0);
+            }}
+            placeholder="Start typing..."
+            className="mt-6 p-4 bg-white text-black rounded-lg w-80 text-center"
+            autoCorrect='off'
+            autoComplete='off'
+            spellCheck='false'
+          />
+        )}
       </main>
     </div>
   );
