@@ -4,7 +4,7 @@ import useRandomWords from '../hooks/useRandomWords';
 
 export default function Home() {
   //Puts random words in an array "words." Set parameter for # of random words
-  const {words, loading, error} = useRandomWords(10);
+  const {words, loading, error} = useRandomWords(75);
 
   return (
     <div className="grid min-h-screen p-6 sm:p-8 font-[Roboto Mono] bg-[var(--background)]">
@@ -24,14 +24,8 @@ export default function Home() {
         
       <div className="relative w-full max-w-[90vw] bg-[#ffd4e5] bg-opacity-50 p-8 rounded-lg shadow-lg">
         {/* <h1 className="text-2xl font-semibold mb-4">spritely words below</h1> */}
-        <p className="text-xl break-words">spritely words and words and words... box expands with more words!{words.join()}</p>
+        <p className="text-2xl leading-loose tracking-wide break-words">{words.map((word) => word.word).join(" ")}</p>
       </div>
-      
-        <ul>
-          {words.map((word) => (
-            <li key={word._id}>{word.word}</li>
-          ))}
-        </ul>
       </main>
       
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
