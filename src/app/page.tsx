@@ -1,6 +1,7 @@
 "use client";
 
 import useRandomWords from '../hooks/useRandomWords';
+import Timer from '@/components/timer';
 
 export default function Home() {
   //Puts random words in an array "words." Set parameter for # of random words
@@ -12,7 +13,7 @@ export default function Home() {
         
       <div className="flex flex-row items-center space-x-6 mb-10 w-full max-w-[90vw] relative">
         <div className="p-4 bg-gray-300 text-black rounded-full">
-          Timer?
+          <Timer />
         </div>
         <div className="absolute left-1/2 transform -translate-x-1/2 p-4 bg-gray-300 text-black rounded-full">
           Possibly text box for user-inputted target wpm? :D
@@ -26,7 +27,8 @@ export default function Home() {
         {/* <h1 className="text-2xl font-semibold mb-4">spritely words below</h1> */}
         <p className="text-xl break-words">spritely words and words and words... box expands with more words!{words.join()}</p>
       </div>
-      
+      {words.map((word) => word.word).join(" ")}
+
         <ul>
           {words.map((word) => (
             <li key={word._id}>{word.word}</li>
