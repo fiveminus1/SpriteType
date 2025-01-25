@@ -34,7 +34,7 @@ const Timer = forwardRef<TimerHandle, TimerProps>((props, ref) => {
 
     return (
         <div>
-            <h2>Time Left: {timeLeft}s</h2>
+            <h2>{timeLeft}s</h2>
         </div>
     );
 });
