@@ -17,6 +17,9 @@ export default function Home() {
         <div className="absolute left-1/2 transform -translate-x-1/2 p-4 bg-gray-300 text-black rounded-full">
           Possibly text box for user-inputted target wpm? :D
         </div>
+        <div className="p-4 bg-gray-300 text-black rounded-full absolute right-0">
+            Replay?
+          </div>
       </div>
         
       <div className="relative w-full max-w-[90vw] bg-[#ffd4e5] bg-opacity-50 p-8 rounded-lg shadow-lg">
