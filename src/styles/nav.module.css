@@ -7,10 +7,10 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    background-color: #B9C297;
+    background-color: #A3BEA3;
     color: #273935;
-    border-bottom-left-radius: 12px;
-    border-bottom-right-radius: 12px;
+    /* border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px; */
     font-size: 22px;
     font-weight: bold;
 }
