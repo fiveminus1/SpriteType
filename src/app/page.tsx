@@ -2,13 +2,16 @@
 
 import useRandomWords from '../hooks/useRandomWords';
 import Timer, {TimerHandle} from '@/components/timer';
-import { FormEvent, useState, useRef } from 'react';
+import { FormEvent, useState, useRef, useEffect } from 'react';
+import { clearInterval } from 'timers';
 
 export default function Home() {
   //Puts random words in an array "words." Set parameter for # of random words
   const {words, loading, error, resetWords} = useRandomWords(75);
   const [wpm, setWpm] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const [isTimerEnded, setIsTimerEnded] = useState(false);
   const timerRef = useRef<TimerHandle>(null);
 
   const handleChange = (e: FormEvent<HTMLInputElement>) => {
@@ -28,47 +31,90 @@ export default function Home() {
     }
   }
 
+  const handleStart = () => {
+    if(timerRef.current){
+      timerRef.current.start();
+      setIsTimerRunning(true);
+      setIsTimerEnded(false);
+    }
+  };
+
   const handleReplay = () =>{
     if(timerRef.current){
       timerRef.current.reset();
+      resetWords();
+      setIsTimerRunning(false);
+      setIsTimerEnded(false);
     }
-    resetWords();
-  }
+  };
+
+  // useEffect(() => {
+  //   let interval: number | null = null;
+
+  //   if(isTimerRunning && timerRef.current){
+  //     interval = window.setInterval(() => {
+  //       const timeLeft = timerRef.current?.getTimeLeft() || 0;
+  //       if(timeLeft === 0){
+  //         setIsTimerRunning(false);
+  //         setIsTimerEnded(true);
+  //         if(interval){
+  //           clearInterval(interval);
+  //         }
+  //       }
+  //     }, 1000);
+  //   }
+
+  //   return () =>{
+  //     if(interval)
+  //       clearInterval(interval);
+  //   };
+  // }, [isTimerRunning]);
+
 
   return (
     <div className="grid min-h-screen p-6 sm:p-8 font-[Roboto Mono] bg-[var(--background)]">
       <main className="flex flex-col items-center justify-start flex-grow mt-20">
-        
-      <div className="flex flex-row items-center space-x-6 mb-10 w-full max-w-[90vw] relative">
-        <div className="p-4 bg-gray-300 text-black rounded-full w-16 h-16 flex items-center justify-center">
-          <Timer ref={timerRef}/>
-        </div>
-        <div className="flex flex-col items-center absolute left-1/2 transform -translate-x-1/2 p-4 pl-6 pr-6 bg-gray-300 text-black rounded-lg w-60">
-          <p className="mb-2 text-med">Target WPM</p>
-          <input
-            type="number"
-            onChange={handleChange} 
-            placeholder="Enter!"
-            className="p-1 pl-5 w-40 rounded-xl bg-white text-black text-center placeholder:text-sm"
-          />
-          {errorMessage && (
-            <p className="text-red-500 mt-2 text-xs">{errorMessage}</p>
-          )}
-          {/* <p className="mt-2">Target WPM: {wpm}</p> */}
-        </div>
+        <div className="flex flex-row items-center justify-between mb-10 w-full max-w-[90vw]">
+          <div className="p-4 bg-gray-300 text-black rounded-full w-16 h-16 flex items-center justify-center">
+            <Timer ref={timerRef}/>
+          </div>
+          <div className="flex flex-col items-center absolute left-1/2 transform -translate-x-1/2 p-4 pl-6 pr-6 bg-gray-300 text-black rounded-lg w-60">
+            <p className="mb-2 text-med">Target WPM</p>
+            <input
+              type="number"
+              onChange={handleChange} 
+              placeholder="Enter!"
+              className="p-1 pl-5 w-40 rounded-xl bg-white text-black text-center placeholder:text-sm"
+            />
+            {errorMessage && (
+              <p className="text-red-500 mt-2 text-xs">{errorMessage}</p>
+            )}
+            {/* <p className="mt-2">Target WPM: {wpm}</p> */}
+          </div>
+            
+          <div className="flex gap-4">
+            <button
+              onClick={handleStart}
+              className="p-4 bg-green-500 text-white rounded-full"
+            >
+              Start
+            </button>
 
-        <button 
-          onClick={handleReplay} 
-          className="p-4 bg-gray-300 text-black rounded-full absolute right-0"
-          >
-            Replay?
-        </button>
-      </div>
-        
-      <div className="relative w-full max-w-[90vw] bg-[#ffd4e5] bg-opacity-50 p-8 rounded-lg shadow-lg">
-        {/* <h1 className="text-2xl font-semibold mb-4">spritely words below</h1> */}
-        <p className="text-2xl leading-loose tracking-wide break-words">{words.map((word) => word.word).join(" ")}</p>
-      </div>
+            
+              <button 
+                onClick={handleReplay}
+                className="p-4 bg-gray-300 text-black rounded-full"
+              >
+                Reset
+              </button>
+            
+          </div>
+        </div>
+          
+        <div className="relative w-full max-w-[90vw] bg-[#ffd4e5] bg-opacity-50 p-8 rounded-lg shadow-lg">
+          {/* <h1 className="text-2xl font-semibold mb-4">spritely words below</h1> */}
+          <p className="text-2xl leading-loose tracking-wide break-words">{words.map((word) => word.word).join(" ")}</p>
+        </div>
       </main>
       
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
