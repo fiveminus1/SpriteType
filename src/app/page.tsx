@@ -35,13 +35,13 @@ export default function Home() {
         <div className="p-4 bg-gray-300 text-black rounded-full border-4 border-gray-400 w-16 h-16 flex items-center justify-center">
           <Timer />
         </div>
-        <div className="flex flex-col items-center absolute left-1/2 transform -translate-x-1/2 p-4 pl-6 pr-6 bg-gray-300 text-black rounded-lg">
+        <div className="flex flex-col items-center absolute left-1/2 transform -translate-x-1/2 p-4 pl-6 pr-6 bg-gray-300 text-black rounded-lg w-60">
           <p className="mb-2 text-med">Target WPM</p>
           <input
             type="number"
             onChange={handleChange} 
-            placeholder="Enter target WPM..."
-            className="p-1 pl-5 w-32 rounded-xl bg-white text-black text-center"
+            placeholder="Enter!"
+            className="p-1 pl-5 w-40 rounded-xl bg-white text-black text-center placeholder:text-sm"
           />
           {errorMessage && (
             <p className="text-red-500 mt-2 text-xs">{errorMessage}</p>
