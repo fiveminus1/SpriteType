@@ -30,11 +30,11 @@ export default function RootLayout({
       <link href="globals.css" rel="stylesheet"></link>
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}
       >
         <div className="flex h-screen flex-col">
           <NavBar />
-          <div className="flex-grow p-6 md:overflow-y-auto md:p-12">{children}</div>
+          <div className="flex-grow p-6 md:p-12">{children}</div>
         </div>
       </body>
     </html>
