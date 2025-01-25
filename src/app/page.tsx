@@ -16,7 +16,7 @@ export default function Home() {
       setErrorMessage('');
     } else if (newWpm > 200){
       setWpm(0);
-      setErrorMessage('WPM must be 200 or less.');
+      setErrorMessage('Target WPM must be 200 or less.');
     } else {
       setWpm(0);
       setErrorMessage('');
