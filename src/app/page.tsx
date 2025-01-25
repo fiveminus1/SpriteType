@@ -35,16 +35,18 @@ export default function Home() {
         <div className="p-4 bg-gray-300 text-black rounded-full">
           <Timer />
         </div>
-        <div className="flex flex-col items-center absolute left-1/2 transform -translate-x-1/2 p-4 pl-6 pr-6 bg-gray-300 text-black rounded-full">
+        <div className="flex flex-col items-center absolute left-1/2 transform -translate-x-1/2 p-4 pl-6 pr-6 bg-gray-300 text-black rounded-lg">
+          <p className="mb-2 text-med">Target WPM</p>
           <input
             type="number"
             onChange={handleChange} 
             placeholder="Enter target WPM..."
+            className="p-1 pl-5 w-32 rounded-xl bg-white text-black text-center"
           />
           {errorMessage && (
             <p className="text-red-500 mt-2 text-xs">{errorMessage}</p>
           )}
-          <p>Target WPM: {wpm}</p>
+          {/* <p className="mt-2">Target WPM: {wpm}</p> */}
         </div>
         <div className="p-4 bg-gray-300 text-black rounded-full absolute right-0">
             Replay?
