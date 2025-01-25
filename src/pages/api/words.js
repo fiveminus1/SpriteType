@@ -1,12 +1,18 @@
 import connectToDatabase from "../../lib/mongodb";
-import Word from "../../models/Word";
 
 export default async function handler(req, res){
-    await connectToDatabase();
+    const client = await connectToDatabase();
+    const db = client.db('typing-test');
+    const collection = db.collection('words');
+    console.log("CONNECTED")
 
     if(req.method === 'GET'){
         try{
-            const words = await Word.find();
+            const { limit = 10 } = req.query;
+
+            const words = await collection.aggregate([
+                { $sample: { size: parseInt(limit)}}
+            ]).toArray();
             res.status(200).json(words);
         } catch(error){
             res.status(500).json({error: 'Failed to fetch words'});

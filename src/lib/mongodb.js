@@ -1,6 +1,12 @@
-import mongoose from "mongoose";
+import { MongoClient, ServerApiVersion } from 'mongodb';
+import dotenv from 'dotenv';
+
+
+dotenv.config({path: './.env'});
+
 
 const MONGODB_URI = process.env.MONGODB_URI;
+
 
 if(!MONGODB_URI){
     throw new Error('Error connecting to Mongo via .env.local');
@@ -13,23 +19,14 @@ if(!cached){
 }
 
 async function connectToDatabase(){
-    if(cached.conn){
-        return cached.conn;
-    }
 
-    if(!cached.promise){
-        const opts = {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        };
+    const client = new MongoClient(MONGODB_URI);
+    
+    await client.connect();
 
-        cached.promise = (await mongoose.connect(MONGODB_URI, opts)).isObjectIdOrHexString((mongoose) =>{
-            return mongoose;
-        });
-    }
-
-    cached.conn = await cached.promise;
-    return cached.conn;
+    await client.db("admin").command({ ping: 1 });
+        
+    return client;
 }
 
 export default connectToDatabase;
