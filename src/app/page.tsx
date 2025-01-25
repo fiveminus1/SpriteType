@@ -12,12 +12,20 @@ export default function Home() {
   const [wpm, setWpm] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
   const [cursorPosition, setCursorPosition] = useState(0);
+  const [startedTyping, setStartedTyping] = useState(false);
   const timerRef = useRef<TimerHandle>(null);
 
   const handleChange = (e: FormEvent<HTMLInputElement>) => {
     const newText = e.currentTarget.value;
     setTypedText(newText);
     setCursorPosition(newText.length);
+
+    if(!startedTyping && newText.length > 0){
+      setStartedTyping(true);
+      if(timerRef.current){
+        timerRef.current.start();
+      }
+    }
   }
 
   const handleWpmChange = (e: FormEvent<HTMLInputElement>) => {
@@ -44,6 +52,7 @@ export default function Home() {
     resetWords();
     setTypedText("");
     setCursorPosition(0);
+    setStartedTyping(false);
   }
 
   return (
