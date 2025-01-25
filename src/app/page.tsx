@@ -1,10 +1,16 @@
 "use client";
 
 import useRandomWords from '../hooks/useRandomWords';
+import { FormEvent, useState } from 'react';
 
 export default function Home() {
   //Puts random words in an array "words." Set parameter for # of random words
   const {words, loading, error} = useRandomWords(10);
+  const [wpm, setWpm] = useState(0);
+
+  const handleChange = (e: FormEvent<HTMLInputElement>) => {
+    setWpm(parseInt(e.currentTarget.value));
+  }
 
   return (
     <div className="grid min-h-screen p-6 sm:p-8 font-[Roboto Mono] bg-[var(--background)]">
@@ -14,8 +20,13 @@ export default function Home() {
         <div className="p-4 bg-gray-300 text-black rounded-full">
           Timer?
         </div>
-        <div className="absolute left-1/2 transform -translate-x-1/2 p-4 bg-gray-300 text-black rounded-full">
-          Possibly text box for user-inputted target wpm? :D
+        <div className="flex flex-col items-center absolute left-1/2 transform -translate-x-1/2 p-4 bg-gray-300 text-black rounded-full">
+          <input
+            type="number"
+            onChange={handleChange} 
+            placeholder="Enter target WPM..."
+          />
+          <p>Target WPM: {wpm}</p>
         </div>
         <div className="p-4 bg-gray-300 text-black rounded-full absolute right-0">
             Replay?
