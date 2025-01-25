@@ -15,6 +15,9 @@ export default function Home() {
     if (newWpm > 0 && newWpm <= 200) {
       setWpm(newWpm);
       setErrorMessage('');
+    } else if (newWpm < 0) {
+      setWpm(0);
+      setErrorMessage('Target WPM must be a positive number.');
     } else if (newWpm > 200){
       setWpm(0);
       setErrorMessage('Target WPM must be 200 or less.');
@@ -32,14 +35,14 @@ export default function Home() {
         <div className="p-4 bg-gray-300 text-black rounded-full">
           <Timer />
         </div>
-        <div className="flex flex-col items-center absolute left-1/2 transform -translate-x-1/2 p-4 bg-gray-300 text-black rounded-full">
+        <div className="flex flex-col items-center absolute left-1/2 transform -translate-x-1/2 p-4 pl-6 pr-6 bg-gray-300 text-black rounded-full">
           <input
             type="number"
             onChange={handleChange} 
             placeholder="Enter target WPM..."
           />
           {errorMessage && (
-            <p className="text-red-500 mt-2">{errorMessage}</p>
+            <p className="text-red-500 mt-2 text-xs">{errorMessage}</p>
           )}
           <p>Target WPM: {wpm}</p>
         </div>
