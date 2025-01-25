@@ -5,7 +5,13 @@ import styles from '@/styles/nav.module.css';
 export default function NavBar() {
   return (
     <div className={styles["nav-bar"]}>
-      <h1>sprite type</h1>
+      <Image
+        src="/sprite-type-logo.png"
+        width={60}
+        height={60}
+        alt="sprite type logo"
+      />
+      <h1 className="pl-4">sprite type</h1>
     </div>
   )
 }
