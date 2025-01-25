@@ -1,25 +1,34 @@
 "use client";
 
 import useRandomWords from '../hooks/useRandomWords';
-import Timer, {TimerHandle} from '@/components/timer';
+import Timer, { TimerHandle } from '@/components/timer';
+import TypingText from '../components/typing-text';
 import { FormEvent, useState, useRef } from 'react';
 
 export default function Home() {
   //Puts random words in an array "words." Set parameter for # of random words
-  const {words, loading, error, resetWords} = useRandomWords(75);
+  const { words, loading, error, resetWords } = useRandomWords(25);
+  const [typedText, setTypedText] = useState(""); // typed text by user
   const [wpm, setWpm] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
+  const [cursorPosition, setCursorPosition] = useState(0);
   const timerRef = useRef<TimerHandle>(null);
 
   const handleChange = (e: FormEvent<HTMLInputElement>) => {
-    const newWpm = parseInt(e.currentTarget.value)
+    const newText = e.currentTarget.value;
+    setTypedText(newText);
+    setCursorPosition(newText.length);
+  }
+
+  const handleWpmChange = (e: FormEvent<HTMLInputElement>) => {
+    const newWpm = parseInt(e.currentTarget.value);
     if (newWpm > 0 && newWpm <= 200) {
       setWpm(newWpm);
       setErrorMessage('');
     } else if (newWpm < 0) {
       setWpm(0);
       setErrorMessage('Target WPM must be a positive number.');
-    } else if (newWpm > 200){
+    } else if (newWpm > 200) {
       setWpm(0);
       setErrorMessage('Target WPM must be 200 or less.');
     } else {
@@ -33,46 +42,53 @@ export default function Home() {
       timerRef.current.reset();
     }
     resetWords();
+    setTypedText("");
+    setCursorPosition(0);
   }
 
   return (
     <div className="grid min-h-screen p-6 sm:p-8 font-[Roboto Mono] bg-[var(--background)]">
       <main className="flex flex-col items-center justify-start flex-grow mt-20">
-        
-      <div className="flex flex-row items-center space-x-6 mb-10 w-full max-w-[90vw] relative">
-        <div className="p-4 bg-gray-300 text-black rounded-full w-16 h-16 flex items-center justify-center">
-          <Timer ref={timerRef}/>
-        </div>
-        <div className="flex flex-col items-center absolute left-1/2 transform -translate-x-1/2 p-4 pl-6 pr-6 bg-gray-300 text-black rounded-lg w-60">
-          <p className="mb-2 text-med">Target WPM</p>
-          <input
-            type="number"
-            onChange={handleChange} 
-            placeholder="Enter!"
-            className="p-1 pl-5 w-40 rounded-xl bg-white text-black text-center placeholder:text-sm"
-          />
-          {errorMessage && (
-            <p className="text-red-500 mt-2 text-xs">{errorMessage}</p>
-          )}
-          {/* <p className="mt-2">Target WPM: {wpm}</p> */}
-        </div>
+        <div className="flex flex-row items-center space-x-6 mb-10 w-full max-w-[90vw] relative">
+          <div className="p-4 bg-gray-300 text-black rounded-full w-16 h-16 flex items-center justify-center">
+            <Timer ref={timerRef} />
+          </div>
+          <div className="flex flex-col items-center absolute left-1/2 transform -translate-x-1/2 p-4 pl-6 pr-6 bg-gray-300 text-black rounded-lg w-60">
+            <p className="mb-2 text-med">Target WPM</p>
+            <input
+              type="number"
+              onChange={handleWpmChange}
+              placeholder="Enter!"
+              className="p-1 pl-5 w-40 rounded-xl bg-white text-black text-center placeholder:text-sm"
+            />
+            {errorMessage && (
+              <p className="text-red-500 mt-2 text-xs">{errorMessage}</p>
+            )}
+          </div>
 
-        <button 
-          onClick={handleReplay} 
-          className="p-4 bg-gray-300 text-black rounded-full absolute right-0"
+          <button
+            onClick={handleReplay}
+            className="p-4 bg-gray-300 text-black rounded-full absolute right-0"
           >
             Replay?
-        </button>
-      </div>
-        
-      <div className="relative w-full max-w-[90vw] bg-[#ffd4e5] bg-opacity-50 p-8 rounded-lg shadow-lg">
-        {/* <h1 className="text-2xl font-semibold mb-4">spritely words below</h1> */}
-        <p className="text-2xl leading-loose tracking-wide break-words">{words.map((word) => word.word).join(" ")}</p>
-      </div>
+          </button>
+        </div>
+
+        {/* Pass the words, typed text, and cursor position to TypingText component */}
+        <TypingText
+          words={words}
+          typedText={typedText}
+          cursorPosition={cursorPosition}
+        />
+
+        <input
+          type="text"
+          value={typedText}
+          onChange={handleChange}
+          placeholder="Start typing..."
+          className="mt-6 p-4 bg-white text-black rounded-lg w-80 text-center"
+        />
       </main>
-      
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-      </footer>
     </div>
   );
 }
