@@ -87,6 +87,9 @@ export default function Home() {
           onChange={handleChange}
           placeholder="Start typing..."
           className="mt-6 p-4 bg-white text-black rounded-lg w-80 text-center"
+          autoCorrect='off'
+          autoComplete='off'
+          spellCheck='false'
         />
       </main>
     </div>
