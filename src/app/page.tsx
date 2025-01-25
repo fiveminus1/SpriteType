@@ -7,9 +7,20 @@ export default function Home() {
   //Puts random words in an array "words." Set parameter for # of random words
   const {words, loading, error} = useRandomWords(10);
   const [wpm, setWpm] = useState(0);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (e: FormEvent<HTMLInputElement>) => {
-    setWpm(parseInt(e.currentTarget.value));
+    const newWpm = parseInt(e.currentTarget.value)
+    if (newWpm > 0 && newWpm <= 200) {
+      setWpm(newWpm);
+      setErrorMessage('');
+    } else if (newWpm > 200){
+      setWpm(0);
+      setErrorMessage('WPM must be 200 or less.');
+    } else {
+      setWpm(0);
+      setErrorMessage('');
+    }
   }
 
   return (
@@ -26,6 +37,9 @@ export default function Home() {
             onChange={handleChange} 
             placeholder="Enter target WPM..."
           />
+          {errorMessage && (
+            <p className="text-red-500 mt-2">{errorMessage}</p>
+          )}
           <p>Target WPM: {wpm}</p>
         </div>
         <div className="p-4 bg-gray-300 text-black rounded-full absolute right-0">
