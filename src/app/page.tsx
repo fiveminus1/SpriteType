@@ -28,8 +28,8 @@ export default function Home() {
     }
   }
 
-  const handleReplay = () =>{
-    if(timerRef.current){
+  const handleReplay = () => {
+    if (timerRef.current) {
       timerRef.current.reset();
     }
     resetWords();
