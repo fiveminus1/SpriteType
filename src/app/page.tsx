@@ -40,7 +40,7 @@ export default function Home() {
       <main className="flex flex-col items-center justify-start flex-grow mt-20">
         
       <div className="flex flex-row items-center space-x-6 mb-10 w-full max-w-[90vw] relative">
-        <div className="p-4 bg-gray-300 text-black rounded-full">
+        <div className="p-4 bg-gray-300 text-black rounded-full w-16 h-16 flex items-center justify-center">
           <Timer ref={timerRef}/>
         </div>
         <div className="flex flex-col items-center absolute left-1/2 transform -translate-x-1/2 p-4 pl-6 pr-6 bg-gray-300 text-black rounded-lg w-60">
