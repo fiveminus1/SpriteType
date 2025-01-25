@@ -69,4 +69,5 @@ const TypingText: React.FC<TypingTextProps> = ({ words, typedText, cursorPositio
   );
 };
 
+
 export default TypingText;
