@@ -12,21 +12,27 @@ if(!MONGODB_URI){
     throw new Error('Error connecting to Mongo via .env.local');
 }
 
-let cached = global.mongoose;
+let cached = global.mongo;
 
 if(!cached){
-    cached = global.mongoose = { conn: null, promise: null};
+    cached = global.mongo = { conn: null, promise: null};
 }
 
 async function connectToDatabase(){
-
-    const client = new MongoClient(MONGODB_URI);
-    
-    await client.connect();
-
-    await client.db("admin").command({ ping: 1 });
+    if(cached.conn){
+        return cached.conn;
+    }
+    if(!cached.promise){
+        const client = new MongoClient(MONGODB_URI);
         
-    return client;
+        cached.promise = client.connect().then(() => {
+            return client.db('admin').command({ping:1}).then(()=>client);
+        });
+    }
+
+    cached.conn = await cached.promise;
+    return cached.conn;
+    
 }
 
 export default connectToDatabase;

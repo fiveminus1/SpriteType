@@ -1,14 +1,15 @@
 "use client";
 
 import useRandomWords from '../hooks/useRandomWords';
-import Timer from '@/components/timer';
-import { FormEvent, useState } from 'react';
+import Timer, {TimerHandle} from '@/components/timer';
+import { FormEvent, useState, useRef } from 'react';
 
 export default function Home() {
   //Puts random words in an array "words." Set parameter for # of random words
-  const {words, loading, error} = useRandomWords(75);
+  const {words, loading, error, resetWords} = useRandomWords(75);
   const [wpm, setWpm] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
+  const timerRef = useRef<TimerHandle>(null);
 
   const handleChange = (e: FormEvent<HTMLInputElement>) => {
     const newWpm = parseInt(e.currentTarget.value)
@@ -27,13 +28,20 @@ export default function Home() {
     }
   }
 
+  const handleReplay = () =>{
+    if(timerRef.current){
+      timerRef.current.reset();
+    }
+    resetWords();
+  }
+
   return (
     <div className="grid min-h-screen p-6 sm:p-8 font-[Roboto Mono] bg-[var(--background)]">
       <main className="flex flex-col items-center justify-start flex-grow mt-20">
         
       <div className="flex flex-row items-center space-x-6 mb-10 w-full max-w-[90vw] relative">
-        <div className="p-4 bg-gray-300 text-black rounded-full border-4 border-gray-400 w-16 h-16 flex items-center justify-center">
-          <Timer />
+        <div className="p-4 bg-gray-300 text-black rounded-full">
+          <Timer ref={timerRef}/>
         </div>
         <div className="flex flex-col items-center absolute left-1/2 transform -translate-x-1/2 p-4 pl-6 pr-6 bg-gray-300 text-black rounded-lg w-60">
           <p className="mb-2 text-med">Target WPM</p>
@@ -48,9 +56,13 @@ export default function Home() {
           )}
           {/* <p className="mt-2">Target WPM: {wpm}</p> */}
         </div>
-        <div className="p-4 bg-gray-300 text-black rounded-full absolute right-0">
+
+        <button 
+          onClick={handleReplay} 
+          className="p-4 bg-gray-300 text-black rounded-full absolute right-0"
+          >
             Replay?
-          </div>
+        </button>
       </div>
         
       <div className="relative w-full max-w-[90vw] bg-[#ffd4e5] bg-opacity-50 p-8 rounded-lg shadow-lg">
