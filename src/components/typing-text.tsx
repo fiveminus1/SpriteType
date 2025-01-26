@@ -74,7 +74,7 @@ const TypingText: React.FC<TypingTextProps> = ({ words, typedText, cursorPositio
               return (
                 <span
                   key={letterIndex}
-                  ref={(el) => (letterRefs.current[letterIndexInText] = el)}
+                  // ref={(el) => (letterRefs.current[letterIndexInText] = el)}
                   className={getLetterClass(wordIndex, letterIndex)}
                   data-word-index={wordIndex}
                   data-letter-index={letterIndex}
