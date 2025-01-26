@@ -62,7 +62,7 @@ const TypingText: React.FC<TypingTextProps> = ({ words, typedText, cursorPositio
         alt="Totoro sprite"
         width={40}
         height={40}
-        style={{ position: 'absolute', top: imagePosition.top, left: imagePosition.left }}
+        style={{ position: 'absolute', top: imagePosition.top, left: imagePosition.left, transition: 'top 0.3s ease, left 0.3s ease' }}
       />
       <p className="text-2xl leading-loose tracking-wide break-words">
         {words.map((word, wordIndex) => (
