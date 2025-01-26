@@ -3,7 +3,9 @@
 import useRandomWords from '../hooks/useRandomWords';
 import Timer, { TimerHandle } from '@/components/timer';
 import TypingText from '../components/typing-text';
-import { FormEvent, useState, useRef } from 'react';
+import { FormEvent, useState, useRef, useEffect } from 'react';
+import { LiaRedoAltSolid } from "react-icons/lia";
+
 
 export default function Home() {
   //Puts random words in an array "words." Set parameter for # of random words
@@ -13,7 +15,9 @@ export default function Home() {
   const [errorMessage, setErrorMessage] = useState('');
   const [cursorPosition, setCursorPosition] = useState(0);
   const [startedTyping, setStartedTyping] = useState(false);
+  const [timerEnded, setTimerEnded] = useState(false);
   const timerRef = useRef<TimerHandle>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleChange = (e: FormEvent<HTMLInputElement>) => {
     const newText = e.currentTarget.value;
@@ -53,16 +57,58 @@ export default function Home() {
     setTypedText("");
     setCursorPosition(0);
     setStartedTyping(false);
-  }
+    if(inputRef.current){
+      inputRef.current.focus();
+      moveCursorToEnd();
+    }
+  };
+
+  const moveCursorToEnd = () => {
+    if(inputRef.current){
+      const length = inputRef.current.value.length;
+      inputRef.current.setSelectionRange(length, length);
+    }
+  };
+
+  const handleTimerEnd = () => {
+    setTimeout(() => {
+      setTimerEnded(true);
+    }, 0);
+  };
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+      moveCursorToEnd();
+    }
+
+    const handleClickOutside = (e: MouseEvent) => {
+      if (inputRef.current && !inputRef.current.contains(e.target as Node)) {
+        inputRef.current.focus();
+        moveCursorToEnd();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className="grid min-h-screen p-6 sm:p-8 font-[Roboto Mono] bg-[var(--background)]">
       <main className="flex flex-col items-center justify-start flex-grow mt-20">
+<<<<<<< HEAD
         <div id='top-row' className="flex flex-row items-center  mb-10 w-full max-w-[90vw] relative">
+=======
+        <div className="flex flex-row items-center justify-between mb-10 w-full max-w-[90vw]">
+>>>>>>> d26c79554c2f8e4c85e493e2e7caccdfe40a3d2c
           <div className="p-4 bg-gray-300 text-black rounded-full w-16 h-16 flex items-center justify-center">
-            <Timer ref={timerRef} />
+            <Timer ref={timerRef} onEnd={handleTimerEnd}/>
           </div>
-          <div className="flex flex-col items-center absolute left-1/2 transform -translate-x-1/2 p-4 pl-6 pr-6 bg-gray-300 text-black rounded-lg w-60">
+
+          <div className="flex flex-col items-center p-4 pl-6 pr-6 bg-gray-300 text-black rounded-lg w-60 mx-auto">
             <p className="mb-2 text-med">Target WPM</p>
             <input
               type="number"
@@ -77,9 +123,9 @@ export default function Home() {
 
           <button
             onClick={handleReplay}
-            className="p-4 bg-gray-300 text-black rounded-full absolute right-0"
+            className="p-4 bg-gray-300 text-black rounded-full w-16 h-16 flex items-center justify-center"
           >
-            Replay?
+            <LiaRedoAltSolid />
           </button>
         </div>
 
@@ -90,16 +136,28 @@ export default function Home() {
           cursorPosition={cursorPosition}
         />
 
-        <input
-          type="text"
-          value={typedText}
-          onChange={handleChange}
-          placeholder="Start typing..."
-          className="mt-6 p-4 bg-white text-black rounded-lg w-80 text-center"
-          autoCorrect='off'
-          autoComplete='off'
-          spellCheck='false'
-        />
+        {!timerEnded && (
+          <input
+            ref={inputRef}
+            type="text"
+            value={typedText}
+            onChange={handleChange}
+            onFocus={moveCursorToEnd}
+            onBlur={()=> {
+              setTimeout(() => { 
+                if(inputRef.current){
+                  inputRef.current.focus()
+                  moveCursorToEnd();
+                }
+              }, 0);
+            }}
+            placeholder="Start typing..."
+            className="mt-6 p-4 bg-white text-black rounded-lg w-80 text-center"
+            autoCorrect='off'
+            autoComplete='off'
+            spellCheck='false'
+          />
+        )}
       </main>
     </div>
   );

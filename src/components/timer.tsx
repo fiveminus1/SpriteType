@@ -8,9 +8,11 @@ export type TimerHandle = {
     getTimeLeft: () => number;
 }
 
-type TimerProps = {};
+type TimerProps = {
+    onEnd: () => void;
+};
 
-const Timer = forwardRef<TimerHandle, TimerProps>((props, ref) => {
+const Timer = forwardRef<TimerHandle, TimerProps>(({onEnd}, ref) => {
     const [timeLeft, setTimeLeft] = useState(15);
     const [isRunning, setIsRunning] = useState(false);
 
@@ -35,11 +37,24 @@ const Timer = forwardRef<TimerHandle, TimerProps>((props, ref) => {
             return;
 
         const intervalId = setInterval(() => {
-            setTimeLeft((prevTime) => prevTime - 1);
+            setTimeLeft((prevTime) => {
+                if(prevTime === 1){
+                    clearInterval(intervalId);
+                    setIsRunning(false);
+                    onEnd();
+                }
+                return prevTime - 1
+            });
         }, 1000);
 
         return () => clearInterval(intervalId);
     }, [timeLeft, isRunning]);
+
+    useEffect(() => {
+        if(timeLeft === 0){
+            onEnd();
+        }
+    }, [timeLeft, onEnd]);
 
     return (
         <div>
@@ -47,5 +62,7 @@ const Timer = forwardRef<TimerHandle, TimerProps>((props, ref) => {
         </div>
     );
 });
+
+
 
 export default Timer;
