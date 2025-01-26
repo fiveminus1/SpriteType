@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 
 type TypingTextProps = {
@@ -8,31 +8,19 @@ type TypingTextProps = {
 };
 
 const TypingText: React.FC<TypingTextProps> = ({ words, typedText, cursorPosition }) => {
-  // Function to get the class for each letter (green for correct, red for wrong, etc.)
+  const containerRef = useRef<HTMLDivElement>(null);
+  const letterRefs = useRef<(HTMLSpanElement | null)[]>([]);
+
   const getLetterClass = (wordIndex: number, letterIndex: number) => {
-    // Get the current letter of the typed text at the given position
     const typedLetter = typedText.split(' ')[wordIndex]?.[letterIndex];
-
-    // Get the corresponding letter from the word at the same position
     const correctLetter = words[wordIndex]?.word[letterIndex];
-
-    // If there's a typed letter, compare it
     if (typedLetter) {
       if (typedLetter === correctLetter) {
-        return 'text-green-500'; // Correct letter will be green
+        return 'text-green-500';
       } else {
-        return 'text-red-500 underline'; // Incorrect letter will be red and underlined
+        return 'text-red-500 underline';
       }
-    } 
-    // else {
-    //   // If the cursor has moved past the current word, mark remaining letters as incorrect
-    //   const currentWordLength = words[wordIndex]?.word.length || 0;
-    //   const totalTypedLength = typedText.split(' ').slice(0, wordIndex).reduce((acc, word) => acc + word.length + 1, 0);
-    //   if (cursorPosition > totalTypedLength + letterIndex) {
-    //     // if (cursorPosition > totalTypedLength) {
-    //     return 'text-red-500 underline'; // Untyped letter will be red and underlined
-    //   }
-    // }
+    }
     const typedWords = typedText.split(' '); // Split typed text into words
     const typedWord = typedWords[wordIndex] || ''; // The typed word at wordIndex
     // const typedLetter = typedWord[letterIndex]; // The typed letter at letterIndex
@@ -41,16 +29,24 @@ const TypingText: React.FC<TypingTextProps> = ({ words, typedText, cursorPositio
     if (cursorPosition > totalTypedLength + typedWord.length) {
       // If space was pressed prematurely, mark all the remaining letters of the word as incorrect
       if (letterIndex >= typedWord.length) {
+        // setImagePosition({ top: imagePosition.top, left: imagePosition.left + 14});
         return 'text-red-500 underline'; // Untyped letters are marked as incorrect (red and underlined)
       }
     }
-
-    // Default: no color (for letters that haven't been typed yet)
     return '';
   };
 
   const handleImageMovement = () => {
-    setImagePosition({ top: 0, left: cursorPosition * 14 });
+    const letterElement = letterRefs.current[cursorPosition];
+    if (letterElement) {
+      const letterRect = letterElement.getBoundingClientRect();
+      const containerRect = containerRef.current?.getBoundingClientRect();
+      if (containerRect) {
+        const top = letterRect.top - containerRect.top - 35;
+        const left = letterRect.left - containerRect.left;
+        setImagePosition({ top, left });
+      }
+    }
   };
 
   const [imagePosition, setImagePosition] = useState({ top: 0, left: 0 });
@@ -60,7 +56,7 @@ const TypingText: React.FC<TypingTextProps> = ({ words, typedText, cursorPositio
   }, [cursorPosition]);
 
   return (
-    <div className="relative w-full max-w-[90vw] bg-[#ffd4e5] bg-opacity-50 p-8 rounded-lg">
+    <div ref={containerRef} className="relative w-full max-w-[90vw] bg-[#ffd4e5] bg-opacity-50 p-8 rounded-lg">
       <Image
         src="/characters/totoro.png"
         alt="Totoro sprite"
@@ -71,23 +67,25 @@ const TypingText: React.FC<TypingTextProps> = ({ words, typedText, cursorPositio
       <p className="text-2xl leading-loose tracking-wide break-words">
         {words.map((word, wordIndex) => (
           <span key={wordIndex} className="inline-block mr-2">
-            {/* For each word, map through the letters */}
-            {word.word.split('').map((letter, letterIndex) => (
-              <span
-                key={letterIndex}
-                className={getLetterClass(wordIndex, letterIndex)} // Assign color/underline based on correctness
-                data-word-index={wordIndex}
-                data-letter-index={letterIndex}
-              >
-                {letter}
-              </span>
-            ))}
+            {word.word.split('').map((letter, letterIndex) => {
+              const letterIndexInText = typedText.split(' ').slice(0, wordIndex).join(' ').length + wordIndex + letterIndex;
+              return (
+                <span
+                  key={letterIndex}
+                  ref={(el) => (letterRefs.current[letterIndexInText] = el)}
+                  className={getLetterClass(wordIndex, letterIndex)}
+                  data-word-index={wordIndex}
+                  data-letter-index={letterIndex}
+                >
+                  {letter}
+                </span>
+              );
+            })}
           </span>
         ))}
       </p>
     </div>
   );
 };
-
 
 export default TypingText;
