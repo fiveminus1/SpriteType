@@ -31,6 +31,7 @@ export default function Home() {
         timerRef.current.start();
       }
     }
+    calculateWpm();
   }
 
   const handleWpmChange = (e: FormEvent<HTMLInputElement>) => {
@@ -77,6 +78,21 @@ export default function Home() {
       setTimerEnded(true);
     }, 0);
   };
+
+  const calculateWpm = () => {
+    if(timerRef.current){
+      const elapsedSeconds = 15 - timerRef.current.getTimeLeft();
+      const elapsedMinutes = elapsedSeconds / 60;
+
+      const wordsTyped = typedText.trim().split(' ').filter((word) => word.length > 0).length;
+    
+      if(elapsedMinutes > 0){
+        setWpm(Math.floor(wordsTyped/elapsedMinutes));
+      } else{
+        setWpm(0);
+      }
+    }
+  }
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -158,6 +174,9 @@ export default function Home() {
             spellCheck='false'
           />
         )}
+
+        <p className="mb-2 text-med">Current WPM</p>
+        <h3 className="text-lg font-bold">{wpm}</h3>
       </main>
     </div>
   );
