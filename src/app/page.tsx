@@ -84,7 +84,7 @@ export default function Home() {
   };
 
   const calculateWpm = () => {
-    if (!startTime) return; // Don't calculate WPM if typing hasn't started
+    if (!startTime || timerEnded) return; // Don't calculate WPM if typing hasn't started
 
     const now = Date.now();
     const elapsedTime = now - startTime; // Elapsed time in milliseconds
@@ -126,11 +126,13 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    if(timerEnded) return;
+
     const interval = setInterval(() => {
       calculateWpm();
     }, 1000);
     return () => clearInterval(interval);
-  }, [startTime, typedText]);
+  }, [startTime, typedText, timerEnded]);
 
   return (
     <div className="grid min-h-screen p-6 sm:p-8 font-[Roboto Mono] bg-[var(--background)]">
