@@ -58,7 +58,7 @@ export default function Home() {
   return (
     <div className="grid min-h-screen p-6 sm:p-8 font-[Roboto Mono] bg-[var(--background)]">
       <main className="flex flex-col items-center justify-start flex-grow mt-20">
-        <div className="flex flex-row items-center space-x-6 mb-10 w-full max-w-[90vw] relative">
+        <div id='top-row' className="flex flex-row items-center  mb-10 w-full max-w-[90vw] relative">
           <div className="p-4 bg-gray-300 text-black rounded-full w-16 h-16 flex items-center justify-center">
             <Timer ref={timerRef} />
           </div>

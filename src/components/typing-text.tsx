@@ -22,6 +22,26 @@ const TypingText: React.FC<TypingTextProps> = ({ words, typedText, cursorPositio
       } else {
         return 'text-red-500 underline'; // Incorrect letter will be red and underlined
       }
+    } 
+    // else {
+    //   // If the cursor has moved past the current word, mark remaining letters as incorrect
+    //   const currentWordLength = words[wordIndex]?.word.length || 0;
+    //   const totalTypedLength = typedText.split(' ').slice(0, wordIndex).reduce((acc, word) => acc + word.length + 1, 0);
+    //   if (cursorPosition > totalTypedLength + letterIndex) {
+    //     // if (cursorPosition > totalTypedLength) {
+    //     return 'text-red-500 underline'; // Untyped letter will be red and underlined
+    //   }
+    // }
+    const typedWords = typedText.split(' '); // Split typed text into words
+    const typedWord = typedWords[wordIndex] || ''; // The typed word at wordIndex
+    // const typedLetter = typedWord[letterIndex]; // The typed letter at letterIndex
+
+    const totalTypedLength = typedWords.slice(0, wordIndex).reduce((acc, word) => acc + word.length + 1, 0); // Total length of all typed words
+    if (cursorPosition > totalTypedLength + typedWord.length) {
+      // If space was pressed prematurely, mark all the remaining letters of the word as incorrect
+      if (letterIndex >= typedWord.length) {
+        return 'text-red-500 underline'; // Untyped letters are marked as incorrect (red and underlined)
+      }
     }
 
     // Default: no color (for letters that haven't been typed yet)
