@@ -6,6 +6,7 @@ import TypingText from '../components/typing-text';
 import { FormEvent, useState, useRef, useEffect } from 'react';
 import { LiaRedoAltSolid } from "react-icons/lia";
 import { PiTShirtThin } from "react-icons/pi";
+import SpriteSelection from '@/components/spriteselection';
 
 
 
@@ -19,6 +20,8 @@ export default function Home() {
   const [startedTyping, setStartedTyping] = useState(false);
   const [timerEnded, setTimerEnded] = useState(false);
   const [startTime, setStartTime] = useState<number | null>(null);
+  const [showPopup, setShowPopup] = useState(false);
+  const [selectedSprite, setSelectedSprite] = useState("/characters/totoro.png");
   const timerRef = useRef<TimerHandle>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const targetWpmRef = useRef<HTMLInputElement>(null);
@@ -146,9 +149,7 @@ export default function Home() {
           </div>
 
           <button
-            onClick={() => {
-
-            }}
+            onClick={() => setShowPopup(true)}
             className="p-4 bg-gray-300 text-black rounded-full w-16 h-16 flex items-center justify-center"
           >
             <PiTShirtThin />
@@ -181,6 +182,7 @@ export default function Home() {
           words={words}
           typedText={typedText}
           cursorPosition={cursorPosition}
+          selectedSprite={selectedSprite}
         />
 
         {!timerEnded && (
@@ -212,6 +214,16 @@ export default function Home() {
 
         <p className="mb-2 text-med">Current WPM</p>
         <h3 className="text-lg font-bold">{wpm}</h3>
+
+        {showPopup && (
+          <SpriteSelection
+            onClose={() => setShowPopup(false)}
+            onSelect={(sprite) => {
+              setSelectedSprite(sprite);
+              setShowPopup(false);
+            }}
+          />
+        )}
       </main>
     </div>
   );
