@@ -16,6 +16,7 @@ export default function Home() {
   const { words, loading, error, resetWords } = useRandomWords(25);
   const [typedText, setTypedText] = useState(""); // typed text by user
   const [wpm, setWpm] = useState(0);
+  const [targetWpm, setTargetWpm] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
   const [cursorPosition, setCursorPosition] = useState(0);
   const [startedTyping, setStartedTyping] = useState(false);
@@ -46,16 +47,16 @@ export default function Home() {
   const handleWpmChange = (e: FormEvent<HTMLInputElement>) => {
     const newWpm = parseInt(e.currentTarget.value);
     if (newWpm > 0 && newWpm <= 200) {
-      setWpm(newWpm);
+      setTargetWpm(newWpm);
       setErrorMessage('');
     } else if (newWpm < 0) {
-      setWpm(0);
+      setTargetWpm(0);
       setErrorMessage('Target WPM must be a positive number.');
     } else if (newWpm > 200) {
-      setWpm(0);
+      setTargetWpm(0);
       setErrorMessage('Target WPM must be 200 or less.');
     } else {
-      setWpm(0);
+      setTargetWpm(0);
       setErrorMessage('');
     }
   }
