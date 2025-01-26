@@ -64,6 +64,7 @@ export default function Home() {
     setStartedTyping(false);
     setTimerEnded(false);
     setStartTime(null);
+    setWpm(0);
     if(inputRef.current){
       inputRef.current.focus();
       moveCursorToEnd();
