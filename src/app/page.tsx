@@ -6,6 +6,8 @@ import TypingText from '../components/typing-text';
 import { FormEvent, useState, useRef, useEffect } from 'react';
 import { LiaRedoAltSolid } from "react-icons/lia";
 import { PiTShirtThin } from "react-icons/pi";
+import SpriteSelection from '@/components/spriteselection';
+import Image from 'next/image';
 
 
 
@@ -14,11 +16,14 @@ export default function Home() {
   const { words, loading, error, resetWords } = useRandomWords(25);
   const [typedText, setTypedText] = useState(""); // typed text by user
   const [wpm, setWpm] = useState(0);
+  const [targetWpm, setTargetWpm] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
   const [cursorPosition, setCursorPosition] = useState(0);
   const [startedTyping, setStartedTyping] = useState(false);
   const [timerEnded, setTimerEnded] = useState(false);
   const [startTime, setStartTime] = useState<number | null>(null);
+  const [showPopup, setShowPopup] = useState(false);
+  const [selectedSprite, setSelectedSprite] = useState("/characters/totoro.png");
   const timerRef = useRef<TimerHandle>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const targetWpmRef = useRef<HTMLInputElement>(null);
@@ -42,16 +47,16 @@ export default function Home() {
   const handleWpmChange = (e: FormEvent<HTMLInputElement>) => {
     const newWpm = parseInt(e.currentTarget.value);
     if (newWpm > 0 && newWpm <= 200) {
-      setWpm(newWpm);
+      setTargetWpm(newWpm);
       setErrorMessage('');
     } else if (newWpm < 0) {
-      setWpm(0);
+      setTargetWpm(0);
       setErrorMessage('Target WPM must be a positive number.');
     } else if (newWpm > 200) {
-      setWpm(0);
+      setTargetWpm(0);
       setErrorMessage('Target WPM must be 200 or less.');
     } else {
-      setWpm(0);
+      setTargetWpm(0);
       setErrorMessage('');
     }
   }
@@ -146,13 +151,13 @@ export default function Home() {
           </div>
 
           <button
-            onClick={() => {
-
-            }}
+            onClick={handleReplay}
             className="p-4 bg-gray-300 text-black rounded-full w-16 h-16 flex items-center justify-center"
           >
-            <PiTShirtThin />
+            <LiaRedoAltSolid />
           </button>
+
+          
 
           <div className="flex flex-col items-center p-4 pl-6 pr-6 bg-gray-300 text-black rounded-lg w-60 mx-auto">
             <p className="mb-2 text-med">Target WPM</p>
@@ -169,11 +174,28 @@ export default function Home() {
           </div>
 
           <button
-            onClick={handleReplay}
+            onClick={() => setShowPopup(true)}
             className="p-4 bg-gray-300 text-black rounded-full w-16 h-16 flex items-center justify-center"
           >
-            <LiaRedoAltSolid />
+           <Image 
+            src={selectedSprite}
+            alt="Icon of the selected sprite"
+            width={32}
+            height={32} 
+            className="object-contain"
+            />
+
           </button>
+          <button
+            onClick={() => {
+
+            }}
+            className="p-4 bg-gray-300 text-black rounded-full w-16 h-16 flex items-center justify-center"
+          >
+            <PiTShirtThin />
+          </button>
+
+          
         </div>
 
         {/* Pass the words, typed text, and cursor position to TypingText component */}
@@ -181,6 +203,7 @@ export default function Home() {
           words={words}
           typedText={typedText}
           cursorPosition={cursorPosition}
+          selectedSprite={selectedSprite}
         />
 
         {!timerEnded && (
@@ -212,6 +235,16 @@ export default function Home() {
 
         <p className="mb-2 text-med">Current WPM</p>
         <h3 className="text-lg font-bold">{wpm}</h3>
+
+        {showPopup && (
+          <SpriteSelection
+            onClose={() => setShowPopup(false)}
+            onSelect={(sprite) => {
+              setSelectedSprite(sprite);
+              setShowPopup(false);
+            }}
+          />
+        )}
       </main>
     </div>
   );
