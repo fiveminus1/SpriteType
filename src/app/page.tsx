@@ -16,9 +16,11 @@ export default function Home() {
   const [cursorPosition, setCursorPosition] = useState(0);
   const [startedTyping, setStartedTyping] = useState(false);
   const [timerEnded, setTimerEnded] = useState(false);
+  const [startTime, setStartTime] = useState<number | null>(null);
   const timerRef = useRef<TimerHandle>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const targetWpmRef = useRef<HTMLInputElement>(null);
+  
 
   const handleChange = (e: FormEvent<HTMLInputElement>) => {
     const newText = e.currentTarget.value;
@@ -27,10 +29,12 @@ export default function Home() {
 
     if(!startedTyping && newText.length > 0){
       setStartedTyping(true);
+      setStartTime(Date.now());
       if(timerRef.current){
         timerRef.current.start();
       }
     }
+    calculateWpm();
   }
 
   const handleWpmChange = (e: FormEvent<HTMLInputElement>) => {
@@ -58,6 +62,9 @@ export default function Home() {
     setTypedText("");
     setCursorPosition(0);
     setStartedTyping(false);
+    setTimerEnded(false);
+    setStartTime(null);
+    setWpm(0);
     if(inputRef.current){
       inputRef.current.focus();
       moveCursorToEnd();
@@ -77,6 +84,31 @@ export default function Home() {
     }, 0);
   };
 
+  const calculateWpm = () => {
+    if (!startTime || timerEnded) return; // Don't calculate WPM if typing hasn't started
+
+    const now = Date.now();
+    const elapsedTime = now - startTime; // Elapsed time in milliseconds
+    const elapsedMinutes = elapsedTime / 60000; // Convert to minutes
+
+    // Count the number of correct characters
+    let correctChars = 0;
+    const typedWords = typedText.split(' ');
+    words.forEach((word, wordIndex) => {
+      const typedWord = typedWords[wordIndex] || '';
+      for (let i = 0; i < word.word.length; i++) {
+        if (typedWord[i] === word.word[i]) {
+          correctChars++;
+        }
+      }
+    });
+
+    // Calculate WPM: (correct characters / 5) / elapsed minutes
+    const wpmValue = (correctChars / 5) / elapsedMinutes;
+    setWpm(Math.round(wpmValue)); // Round to the nearest integer
+  };
+
+
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (inputRef.current && targetWpmRef.current &&
@@ -93,6 +125,15 @@ export default function Home() {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  useEffect(() => {
+    if(timerEnded) return;
+
+    const interval = setInterval(() => {
+      calculateWpm();
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [startTime, typedText, timerEnded]);
 
   return (
     <div className="grid min-h-screen p-6 sm:p-8 font-[Roboto Mono] bg-[var(--background)]">
@@ -157,6 +198,9 @@ export default function Home() {
             spellCheck='false'
           />
         )}
+
+        <p className="mb-2 text-med">Current WPM</p>
+        <h3 className="text-lg font-bold">{wpm}</h3>
       </main>
     </div>
   );
