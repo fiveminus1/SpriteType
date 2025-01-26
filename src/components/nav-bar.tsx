@@ -18,14 +18,14 @@ export default function NavBar() {
         <h1 className="pl-4">sprite type</h1>
       </div>
 
-      <button
+      {/* <button
         onClick={() => {
           console.log('test settings button')
         }}
         className="p-2 rounded-full hover:bg-gray-300 transition-all"
       >
         <FiSettings className="w-6 h-6 text-black" />
-      </button>
+      </button> */}
     </div>
   );
 }
