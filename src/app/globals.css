@@ -5,6 +5,7 @@
 :root {
   --background: #ffffff;
   --foreground: pink;
+  cursor: url('/custom-cursor/yellow-star.png'), auto;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -18,7 +19,10 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: 'Roboto Mono', sans-serif;
-  cursor: url('/custom-cursor/yellow-star.png'), auto;
+}
+
+input {
+  cursor: url('/custom-cursor/pink-star.png'), auto;
 }
 
 button {
