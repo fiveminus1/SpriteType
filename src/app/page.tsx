@@ -154,6 +154,14 @@ export default function Home() {
           >
             <PiTShirtThin />
           </button>
+          <button
+            onClick={() => {
+
+            }}
+            className="p-4 bg-gray-300 text-black rounded-full w-16 h-16 flex items-center justify-center"
+          >
+            <PiTShirtThin />
+          </button>
 
           <div className="flex flex-col items-center p-4 pl-6 pr-6 bg-gray-300 text-black rounded-lg w-60 mx-auto">
             <p className="mb-2 text-med">Target WPM</p>
