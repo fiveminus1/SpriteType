@@ -19,3 +19,7 @@ body {
   background: var(--background);
   font-family: 'Roboto Mono', sans-serif;
 }
+
+.custom-cursor {
+  cursor: url('/custom-cursor/yellow-star.png'), auto;
+}

@@ -30,7 +30,7 @@ export default function RootLayout({
       <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}
+        className={`custom-cursor ${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}
       >
         <div className="flex h-screen flex-col">
           <NavBar />
