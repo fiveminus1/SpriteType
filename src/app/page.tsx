@@ -99,11 +99,7 @@ export default function Home() {
   return (
     <div className="grid min-h-screen p-6 sm:p-8 font-[Roboto Mono] bg-[var(--background)]">
       <main className="flex flex-col items-center justify-start flex-grow mt-20">
-<<<<<<< HEAD
-        <div id='top-row' className="flex flex-row items-center  mb-10 w-full max-w-[90vw] relative">
-=======
         <div className="flex flex-row items-center justify-between mb-10 w-full max-w-[90vw]">
->>>>>>> d26c79554c2f8e4c85e493e2e7caccdfe40a3d2c
           <div className="p-4 bg-gray-300 text-black rounded-full w-16 h-16 flex items-center justify-center">
             <Timer ref={timerRef} onEnd={handleTimerEnd}/>
           </div>
