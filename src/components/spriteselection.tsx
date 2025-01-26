@@ -10,7 +10,7 @@ type SpriteProps = {
 const SpriteSelection: React.FC<SpriteProps> = ({onClose, onSelect}) => {
     const sprites = [
         { id: "totoro", name: "Totoro", image: "/characters/totoro.png"},
-
+        { id: "bunny", name: "Bunny", image: "/characters/bunny.png"}
     ];
 
     return (
