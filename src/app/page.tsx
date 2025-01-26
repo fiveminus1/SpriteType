@@ -5,6 +5,8 @@ import Timer, { TimerHandle } from '@/components/timer';
 import TypingText from '../components/typing-text';
 import { FormEvent, useState, useRef, useEffect } from 'react';
 import { LiaRedoAltSolid } from "react-icons/lia";
+import { PiTShirtThin } from "react-icons/pi";
+
 
 
 export default function Home() {
@@ -138,10 +140,19 @@ export default function Home() {
   return (
     <div className="grid min-h-screen p-6 sm:p-8 font-[Roboto Mono] bg-[var(--background)]">
       <main className="flex flex-col items-center justify-start flex-grow mt-20">
-        <div className="flex flex-row items-center justify-between mb-10 w-full max-w-[90vw]">
+        <div className="flex flex-row items-center justify-between mb-10 w-full max-w-[90vw] gap-4">
           <div className="p-4 bg-gray-300 text-black rounded-full w-16 h-16 flex items-center justify-center">
             <Timer ref={timerRef} onEnd={handleTimerEnd}/>
           </div>
+
+          <button
+            onClick={() => {
+
+            }}
+            className="p-4 bg-gray-300 text-black rounded-full w-16 h-16 flex items-center justify-center"
+          >
+            <PiTShirtThin />
+          </button>
 
           <div className="flex flex-col items-center p-4 pl-6 pr-6 bg-gray-300 text-black rounded-lg w-60 mx-auto">
             <p className="mb-2 text-med">Target WPM</p>
