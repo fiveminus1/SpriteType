@@ -28,3 +28,7 @@ input {
 button {
   cursor: url('/custom-cursor/pink-star.png'), auto;
 }
+
+.cursor-pointer {
+  cursor: url('/custom-cursor/pink-star.png'), auto;
+}
