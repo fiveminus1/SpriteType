@@ -233,8 +233,22 @@ export default function Home() {
           />
         )}
 
+
         <p className="mb-2 text-med">Current WPM</p>
         <h3 className="text-lg font-bold">{wpm}</h3>
+
+        {timerEnded && (
+          <div className="mt-6 p-4 bg-gray-300 text-black rounded-lg w-80 text-center">
+            <p className="mb-2 text-med">Your Final WPM</p>
+            <h3 className="text-lg font-bold">{wpm}</h3>
+            {wpm >= targetWpm && targetWpm > 0 && (
+              <p className="mt-2 text-green-600 font-bold">Congratulations! You met your target WPM! 🎉</p>
+            )}
+            {wpm < targetWpm && targetWpm > 0 && (
+              <p className="mt-2 text-red-600 font-bold">Unfortunately, you didn't meet your goal. Keep practicing! 💪</p>
+            )}
+          </div>
+        )}
 
         {showPopup && (
           <SpriteSelection

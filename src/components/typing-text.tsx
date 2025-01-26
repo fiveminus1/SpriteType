@@ -55,6 +55,8 @@ const TypingText: React.FC<TypingTextProps> = ({ words, typedText, cursorPositio
     handleImageMovement();
   }, [cursorPosition]);
 
+
+
   return (
     <div ref={containerRef} className="relative w-full max-w-[90vw] bg-[#ffd4e5] bg-opacity-50 p-8 rounded-lg">
       <Image
@@ -68,7 +70,6 @@ const TypingText: React.FC<TypingTextProps> = ({ words, typedText, cursorPositio
         {words.map((word, wordIndex) => (
           <span key={wordIndex} className="inline-block mr-2">
             {word.word.split('').map((letter, letterIndex) => {
-              // const letterIndexInText = typedText.split(' ').slice(0, wordIndex).join(' ').length + wordIndex + letterIndex;
               const letterIndexInText = typedText.split(' ').slice(0, wordIndex).reduce((acc, word) => acc + word.length + 1, 0) + letterIndex;
 
               return (
@@ -84,6 +85,7 @@ const TypingText: React.FC<TypingTextProps> = ({ words, typedText, cursorPositio
                 </span>
               );
             })}
+
           </span>
         ))}
       </p>
