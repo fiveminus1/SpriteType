@@ -5,9 +5,10 @@ type TypingTextProps = {
   words: { word: string }[];  // Array of words
   typedText: string;  // The text typed by the user
   cursorPosition: number;  // The position of the cursor (the index of the last typed letter)
+  selectedSprite: string;
 };
 
-const TypingText: React.FC<TypingTextProps> = ({ words, typedText, cursorPosition }) => {
+const TypingText: React.FC<TypingTextProps> = ({ words, typedText, cursorPosition, selectedSprite }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const letterRefs = useRef<(HTMLSpanElement | null)[]>([]);
 
@@ -23,7 +24,6 @@ const TypingText: React.FC<TypingTextProps> = ({ words, typedText, cursorPositio
     }
     const typedWords = typedText.split(' '); // Split typed text into words
     const typedWord = typedWords[wordIndex] || ''; // The typed word at wordIndex
-    // const typedLetter = typedWord[letterIndex]; // The typed letter at letterIndex
 
     const totalTypedLength = typedWords.slice(0, wordIndex).reduce((acc, word) => acc + word.length + 1, 0); // Total length of all typed words
     if (cursorPosition > totalTypedLength + typedWord.length) {
@@ -58,7 +58,7 @@ const TypingText: React.FC<TypingTextProps> = ({ words, typedText, cursorPositio
   return (
     <div ref={containerRef} className="relative w-full max-w-[90vw] bg-[#ffd4e5] bg-opacity-50 p-8 rounded-lg">
       <Image
-        src="/characters/totoro.png"
+        src={selectedSprite}
         alt="Totoro sprite"
         width={40}
         height={40}
