@@ -18,6 +18,7 @@ export default function Home() {
   const [timerEnded, setTimerEnded] = useState(false);
   const timerRef = useRef<TimerHandle>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const targetWpmRef = useRef<HTMLInputElement>(null);
 
   const handleChange = (e: FormEvent<HTMLInputElement>) => {
     const newText = e.currentTarget.value;
@@ -77,13 +78,10 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-      moveCursorToEnd();
-    }
-
     const handleClickOutside = (e: MouseEvent) => {
-      if (inputRef.current && !inputRef.current.contains(e.target as Node)) {
+      if (inputRef.current && targetWpmRef.current &&
+        !inputRef.current.contains(e.target as Node) &&
+       !targetWpmRef.current.contains(e.target as Node)) {
         inputRef.current.focus();
         moveCursorToEnd();
       }
@@ -107,6 +105,7 @@ export default function Home() {
           <div className="flex flex-col items-center p-4 pl-6 pr-6 bg-gray-300 text-black rounded-lg w-60 mx-auto">
             <p className="mb-2 text-med">Target WPM</p>
             <input
+              ref={targetWpmRef}
               type="number"
               onChange={handleWpmChange}
               placeholder="Enter!"
@@ -139,7 +138,11 @@ export default function Home() {
             value={typedText}
             onChange={handleChange}
             onFocus={moveCursorToEnd}
-            onBlur={()=> {
+            onBlur={(e)=> {
+              const relatedTarget = e.relatedTarget as Node;
+              if(targetWpmRef.current && targetWpmRef.current.contains(relatedTarget)){
+                return;
+              }
               setTimeout(() => { 
                 if(inputRef.current){
                   inputRef.current.focus()
