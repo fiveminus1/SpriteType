@@ -58,6 +58,7 @@ export default function Home() {
     setTypedText("");
     setCursorPosition(0);
     setStartedTyping(false);
+    setTimerEnded(false);
     if(inputRef.current){
       inputRef.current.focus();
       moveCursorToEnd();
