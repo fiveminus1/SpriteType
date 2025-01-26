@@ -40,7 +40,7 @@ const TypingText: React.FC<TypingTextProps> = ({ words, typedText, cursorPositio
   }, [cursorPosition]);
 
   return (
-    <div className="relative w-full max-w-[90vw] bg-[#ffd4e5] bg-opacity-50 p-8 rounded-lg shadow-lg">
+    <div className="relative w-full max-w-[90vw] bg-[#ffd4e5] bg-opacity-50 p-8 rounded-lg">
       <Image
         src="/characters/totoro.png"
         alt="Totoro sprite"
@@ -68,5 +68,6 @@ const TypingText: React.FC<TypingTextProps> = ({ words, typedText, cursorPositio
     </div>
   );
 };
+
 
 export default TypingText;
