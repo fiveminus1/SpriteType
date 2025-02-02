@@ -225,8 +225,8 @@ export default function Home() {
                 }
               }, 0);
             }}
-            placeholder="Start typing..."
-            className="mt-6 p-4 bg-white text-black rounded-lg w-80 text-center"
+            placeholder="Start typing here..."
+            className="mt-6 p-4 border-4 border-stone-100 bg-white text-black rounded-lg w-80 text-center"
             autoCorrect='off'
             autoComplete='off'
             spellCheck='false'
